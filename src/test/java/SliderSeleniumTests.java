@@ -10,12 +10,15 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 public class SliderSeleniumTests extends BaseSeleniumTests{
 
 
     @BeforeMethod
     public void setUpSliderTest(){
         chromeDriver.get("https://jqueryui.com/slider/#custom-handle");
+        chromeDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         chromeDriver.switchTo().frame(chromeDriver.findElement(By.tagName("iframe")));
         //WebDriverWait wait = new WebDriverWait(chromeDriver, 15);
     }
@@ -57,11 +60,11 @@ public class SliderSeleniumTests extends BaseSeleniumTests{
 
     @Test
     public void sliderSecondTest(){
-        String sliderId = "slider";
+        String sliderXpath = "//div[@id='slider']";
         String moverId = "custom-handle";
 
         // sliderBarElement = chromeDriver.findElement(By.id(sliderId));
-        WebElement sliderBarElement = chromeDriver.findElement(By.xpath("//div[@id='slider']"));
+        WebElement sliderBarElement = chromeDriver.findElement(By.xpath(sliderXpath));
         Assert.assertTrue(sliderBarElement.isDisplayed());
         Dimension sliderSize = sliderBarElement.getSize();
         int sliderWidth = sliderSize.getWidth();
@@ -90,9 +93,8 @@ public class SliderSeleniumTests extends BaseSeleniumTests{
     }
 
     @Test
-    public void sliderMainTest(){
+    public void sliderWorstTest(){
         String moverId = "custom-handle";
-
         WebElement sliderMoverElement = chromeDriver.findElement(By.id(moverId));
         sliderMoverElement.click();
 
@@ -110,6 +112,29 @@ public class SliderSeleniumTests extends BaseSeleniumTests{
         sleepForOneSec();
     }
 
+
+    @Test
+    public void sliderMainTest(){
+        String moverId = "custom-handle";
+        WebElement sliderMoverElement = chromeDriver.findElement(By.id(moverId));
+        sliderMoverElement.click();
+
+        moveJQuerySliderByArrowKey(sliderMoverElement, 80);
+        assertAfterSteps(sliderMoverElement, 80);
+        sleepForOneSec();
+        moveJQuerySliderByArrowKey(sliderMoverElement, 50);
+        assertAfterSteps(sliderMoverElement, 50);
+        sleepForOneSec();
+        moveJQuerySliderByArrowKey(sliderMoverElement, 55);
+        assertAfterSteps(sliderMoverElement, 55);
+        sleepForOneSec();
+        moveJQuerySliderByArrowKey(sliderMoverElement, 55);
+        assertAfterSteps(sliderMoverElement, 55);
+        sleepForOneSec();
+
+
+    }
+
     private void assertAfterSteps(WebElement sliderMover, int value){
         String testingString = "left: " + value + "%;";
         String sliderPercent = sliderMover.getAttribute("style");
@@ -121,6 +146,20 @@ public class SliderSeleniumTests extends BaseSeleniumTests{
         Action action = actions.clickAndHold(widget).moveByOffset(offset, 0).release().build();
         action.perform();
 
+    }
+
+    private void moveJQuerySliderByArrowKey(WebElement elem, int target){
+        int actualPos = Integer.parseInt(elem.getText());
+        System.out.println(actualPos);
+        int step;
+        if ( actualPos > target){
+            step = actualPos-target;
+            moveJQuerySliderLeftByArrowKey(step);
+        }
+        else {
+            step = target-actualPos;
+            moveJQuerySliderRightByArrowKey(target-actualPos);
+        }
     }
 
     private void moveJQuerySliderLeftByArrowKey(int step){
