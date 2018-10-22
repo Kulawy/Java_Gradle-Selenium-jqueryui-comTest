@@ -76,8 +76,8 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         }
 
         int iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
-        System.out.println(""+iMonthActual);
-        if (dateToSet.getMonthValue() > iMonthActual) {
+        System.out.println("After year pick, picked month: "+iMonthActual);
+        if (dateToSet.getMonthValue()  > iMonthActual) {
             while(parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText()) != dateToSet.getMonthValue()){
                 monthChangerHigher();
             }
@@ -103,8 +103,8 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         String pickedDate = datePickerElem.getAttribute("value");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         String dateToSetString = dateToSet.format(formatter);
-        //System.out.println(pickedDate);
-        //System.out.println(dateToSetString);
+        System.out.println(pickedDate);
+        System.out.println(dateToSetString);
 
         Assert.assertEquals(dateToSetString, pickedDate);
 
