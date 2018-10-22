@@ -19,7 +19,7 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
     @BeforeMethod
     public void setUpParametrized() {
         chromeDriver.get("https://jqueryui.com/datepicker/#other-months");
-        chromeDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         chromeDriver.switchTo().frame(chromeDriver.findElement(By.tagName("iframe")));
         datePickerId = "datepicker";
         calendarElemId = "//div[@id='slider']";
