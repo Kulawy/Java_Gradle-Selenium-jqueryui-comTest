@@ -13,16 +13,17 @@ import java.util.concurrent.TimeUnit;
 public class CalendarSeleniumTests extends BaseSeleniumTests {
 
     String datePickerId;
-    String calendarElemId;
+    //String calendarElemId;
     WebElement datePickerElem;
 
     @BeforeMethod
     public void setUpParametrized() {
         chromeDriver.get("https://jqueryui.com/datepicker/#other-months");
-        chromeDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         chromeDriver.switchTo().frame(chromeDriver.findElement(By.tagName("iframe")));
+        chromeDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         datePickerId = "datepicker";
-        calendarElemId = "//div[@id='slider']";
+        //calendarElemId = "//div[@id='slider']";
         datePickerElem = chromeDriver.findElement(By.id(datePickerId));
     }
 
@@ -57,9 +58,6 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
     @Test(dataProvider = "dateValues")
     public void calendarTest(LocalDate dateToSet) {
 
-        String monthToSet = dateToSet.getMonth().toString();
-        String yearToSet = "" + dateToSet.getYear();
-        String dayToSet = "" + dateToSet.getDayOfMonth();
         datePickerElem.click();
 
         if (dateToSet.getYear() > Integer.parseInt(chromeDriver.findElement(By.className("ui-datepicker-year")).getText())) {
@@ -76,17 +74,39 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         }
 
         int iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
-        System.out.println("After year pick, picked month: "+iMonthActual);
-        if (dateToSet.getMonthValue()  > iMonthActual) {
-            while(parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText()) != dateToSet.getMonthValue()){
+        System.out.println("After year pick, before picked month: "+iMonthActual);
+        System.out.println("After year pick, month to set: "+dateToSet.getMonthValue());
+
+        while (iMonthActual != dateToSet.getMonthValue()){
+            if (dateToSet.getMonthValue()  > iMonthActual){
                 monthChangerHigher();
+                iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
+            }
+            else {
+                monthChangerLower();
+                iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
+            }
+        }
+
+        iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
+        System.out.println("After month pick, before picking day: "+iMonthActual);
+
+        /*
+        if (dateToSet.getMonthValue()  > iMonthActual) {
+            while( iMonthActual != dateToSet.getMonthValue()){
+                monthChangerHigher();
+                iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
+
             }
 
         } else if (dateToSet.getMonthValue() < iMonthActual) {
-            while(parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText()) != dateToSet.getMonthValue()){
+            while(iMonthActual != dateToSet.getMonthValue()){
                 monthChangerLower();
+                iMonthActual = parseMonth(chromeDriver.findElement(By.className("ui-datepicker-month")).getText());
             }
         }
+        */
+
 
         List<WebElement> dates = chromeDriver.findElements(By.cssSelector("td[data-handler=\"selectDay\"]"));
         int totalNodesCount = dates.size();
@@ -94,7 +114,7 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
 
         for (int i=0; i<totalNodesCount; i++){
             int pickedDay = Integer.parseInt(dates.get(i).getText());
-            if ( dateToSet.getDayOfMonth() == pickedDay){
+            if ( (dateToSet.getDayOfMonth() == pickedDay)  && ( i+ 1 >= pickedDay  ) ){
                 dates.get(i).click();
                 break;
             }
@@ -106,7 +126,9 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         System.out.println(pickedDate);
         System.out.println(dateToSetString);
 
-        Assert.assertEquals(dateToSetString, pickedDate);
+        System.out.println("Date to set is :"  + dateToSetString);
+
+        Assert.assertEquals(pickedDate, dateToSetString);
 
     }
 
