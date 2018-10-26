@@ -21,7 +21,7 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         chromeDriver.get("https://jqueryui.com/datepicker/#other-months");
         chromeDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         chromeDriver.switchTo().frame(chromeDriver.findElement(By.tagName("iframe")));
-        chromeDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+        //chromeDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         datePickerId = "datepicker";
         //calendarElemId = "//div[@id='slider']";
         datePickerElem = chromeDriver.findElement(By.id(datePickerId));
@@ -123,9 +123,7 @@ public class CalendarSeleniumTests extends BaseSeleniumTests {
         String pickedDate = datePickerElem.getAttribute("value");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         String dateToSetString = dateToSet.format(formatter);
-        System.out.println(pickedDate);
-        System.out.println(dateToSetString);
-
+        System.out.println("picked date is :" + pickedDate);
         System.out.println("Date to set is :"  + dateToSetString);
 
         Assert.assertEquals(pickedDate, dateToSetString);

@@ -31,7 +31,6 @@ public class DragAndDropSeleniumTests extends BaseSeleniumTests{
         sleepForTreeSec();
 
         Assert.assertEquals(dropWebElement.getText(), "Dropped!");
-
     }
 
     private void dragAndDropAction(WebElement source, WebElement target){

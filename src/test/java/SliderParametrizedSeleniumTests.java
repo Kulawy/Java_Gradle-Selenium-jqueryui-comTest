@@ -7,7 +7,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-public class SliterParametrizedSeleniumTests extends BaseSeleniumTests {
+public class SliderParametrizedSeleniumTests extends BaseSeleniumTests {
 
     private String sliderXpath;
     private String moverId;
