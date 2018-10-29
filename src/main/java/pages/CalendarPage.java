@@ -31,16 +31,20 @@ public class CalendarPage extends BasePage {
         PageFactory.initElements(_driver, this);
         (new WebDriverWait(_driver,10))
                 .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(elementIFrame));
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitForPageLoad( 3000 );
         // SOORRY ZA TO ALE STRONA JAKBY SIĘ PRZEŁADOWUJE JAK SIĘ WŁĄCZA
         // NIE WAZNE CZY SIE JAKI BUTTON WLACZY CZY NIE ONA SIE PRZELADOWUJE
         //WIEC TRZEBA POCZEKAC AZ SIE TAK STATYCZNIE ZALADUJE,
         //NAWET PROBOWALEM CZEKAC AZ SIE CALE BODY ZALADUJE ALE TO nic nie dalo
         //clickElement(elementDatePicker);
+    }
+
+    private void waitForPageLoad(int timeInMilis) {
+        try {
+            Thread.sleep(timeInMilis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @FindBy( tagName = "iframe")
